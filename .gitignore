@@ -1,0 +1,11 @@
+# Generated files
+*.elc
+*-pkg.el
+*.tar
+TAGS
+doc/multimu4e.texi
+doc/multimu4e.info
+
+# Packages
+.cask
+elpa
