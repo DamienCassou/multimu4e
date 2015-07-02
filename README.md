@@ -8,8 +8,6 @@ Facilitate the configuration of multiple accounts in mu4e
 
 ## Installing
 
-Use [melpa](http://melpa.milkbox.net).
-
 You may want to add something like that to your Emacs initialization
 file:
 
