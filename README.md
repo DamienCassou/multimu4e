@@ -6,12 +6,16 @@ Facilitate the configuration of multiple accounts in mu4e
 
 ## Installing
 
-You will need Emacs 24+, `make` and [Cask](https://github.com/cask/cask) to
-build the project.
+Use [melpa](http://melpa.milkbox.net).
 
-    cd multimu4e
-    make && make install
+You may want to add something like that to your Emacs initialization
+file:
 
+```emacs
+(require 'multimu4e)
+(add-hook 'mu4e-compose-pre-hook #'multimu4e-set-account-in-compose)
+(bind-key "C-c F" #'multimu4e-force-account-in-compose)
+```
 
 ## Contributing
 
