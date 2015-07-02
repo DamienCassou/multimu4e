@@ -20,6 +20,18 @@ TAR          = $(DIST)/multimu4e-$(VERSION).tar
 all : deps $(TAR)
 
 deps :
+	# Horrible hack to depend on mu4e even if it is not packaged
+	# in any repository
+	git submodule init
+	git submodule update
+	# mu4e
+	cp dependencies/mu/mu4e/mu4e-meta.el.in dependencies/mu/mu4e/mu4e-meta.el
+	git config --global user.email "damien@cassou.me"
+	git config --global user.name "Damien Cassou"
+	git -C dependencies/mu checkout -b multimu4e-fake
+	git -C dependencies/mu add -f mu4e/mu4e-meta.el
+	git -C dependencies/mu commit -m 'Add generated files'
+	# </horrible-hack> <-- not W3C compliant :-)
 	$(CASK) install
 
 check : deps

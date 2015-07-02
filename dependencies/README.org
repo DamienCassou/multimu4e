@@ -1,0 +1,2 @@
+This directory contains mu4e which is not packaged in an Emacs
+repository. mu4e is fetched as a git submodule.
