@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DamienCassou/multimu4e.svg?branch=master)](https://travis-ci.org/DamienCassou/multimu4e)
+
 # multimu4e
 
 ## Summary
