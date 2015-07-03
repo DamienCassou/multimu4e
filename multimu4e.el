@@ -152,8 +152,10 @@ return nil."
              mu4e-compose-parent-message)
     (multimu4e--guess-account-from-message mu4e-compose-parent-message)))
 
-(defun multimu4e--set-account (account)
+;;;###autoload
+(defun multimu4e-set-account (account)
   "Set all bindings of ACCOUNT."
+  (interactive (list (multimu4e--choose-account)))
   (mapc (lambda (binding) (set (multimu4e--binding-name binding)
                           (multimu4e--binding-value binding)))
         (multimu4e--bindings account)))
@@ -161,8 +163,8 @@ return nil."
 ;;;###autoload
 (defun multimu4e-set-account-in-compose ()
   "Set all bindings of the account best suited to compose."
-  (multimu4e--set-account (or (multimu4e--guess-account-in-compose)
-                              (multimu4e--choose-account))))
+  (multimu4e-set-account (or (multimu4e--guess-account-in-compose)
+                             (multimu4e--choose-account))))
 
 (defun multimu4e--change-from-in-compose (&optional name address)
   "Change the From: of current message using NAME and ADDRESS.
@@ -179,15 +181,15 @@ If NAME or ADDRESS are not provided, use the variables `user-full-name' and
                     (or address user-mail-address)))))
 
 ;;;###autoload
-(defun multimu4e-set-account (account-name)
+(defun multimu4e-set-account-from-name (account-name)
   "Set all bindings of account named ACCOUNT-NAME."
-  (multimu4e--set-account (multimu4e--account-with-name account-name)))
+  (multimu4e-set-account (multimu4e--account-with-name account-name)))
 
 (defun multimu4e-force-account-in-compose (account)
   "Bind all ACCOUNT variables and modify the From: field of current message.
 Interactively, ask the user for the account to use."
   (interactive (list (multimu4e--choose-account)))
-  (multimu4e--set-account account)
+  (multimu4e-set-account account)
   (multimu4e--change-from-in-compose))
 
 (provide 'multimu4e)

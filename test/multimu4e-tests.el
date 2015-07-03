@@ -91,7 +91,7 @@
 
 (ert-deftest multimu4e-tests-set-account ()
   (should-not (boundp 'multimu4e-account-maildir))
-  (multimu4e--set-account (car multimu4e-account-alist))
+  (multimu4e-set-account (car multimu4e-account-alist))
   (should (boundp 'multimu4e-account-maildir))
   (should (equal "/Maildir1" multimu4e-account-maildir)))
 
