@@ -16,10 +16,10 @@ TESTS        = $(wildcard test/*.el)
 TAR          = $(DIST)/multimu4e-$(VERSION).tar
 
 
-.PHONY: all deps check install uninstall reinstall clean-all clean
+.PHONY: all mu4e deps check install uninstall reinstall clean-all clean
 all : deps $(TAR)
 
-deps :
+mu4e :
 	# Horrible hack to depend on mu4e even if it is not packaged
 	# in any repository
 	git submodule init
@@ -32,6 +32,8 @@ deps :
 	git -C dependencies/mu add -f mu4e/mu4e-meta.el
 	git -C dependencies/mu commit -m 'Add generated files'
 	# </horrible-hack> <-- not W3C compliant :-)
+
+deps :
 	$(CASK) install
 
 check : deps
