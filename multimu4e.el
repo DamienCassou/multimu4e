@@ -179,6 +179,10 @@ If NAME or ADDRESS are not provided, use the variables `user-full-name' and
                     (or address user-mail-address)))))
 
 ;;;###autoload
+(defun multimu4e-set-account (account-name)
+  "Set all bindings of account named ACCOUNT-NAME."
+  (multimu4e--set-account (multimu4e--account-with-name account-name)))
+
 (defun multimu4e-force-account-in-compose (account)
   "Bind all ACCOUNT variables and modify the From: field of current message.
 Interactively, ask the user for the account to use."
