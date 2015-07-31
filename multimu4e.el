@@ -41,6 +41,7 @@
     mu4e-sent-folder
     mu4e-sent-messages-behavior
     mu4e-drafts-folder
+    mu4e-compose-signature
     smtpmail-queue-dir
     smtpmail-local-domain
     smtpmail-smtp-user
@@ -180,6 +181,16 @@ If NAME or ADDRESS are not provided, use the variables `user-full-name' and
                     (or name user-full-name)
                     (or address user-mail-address)))))
 
+(defun multimu4e--change-signature-in-compose ()
+  "Change the signature of the current message."
+  (save-excursion
+    (set (make-local-variable 'message-signature) mu4e-compose-signature)
+    (message-goto-signature)
+    (message-beginning-of-line)
+    (previous-line 2)
+    (delete-region (point) (point-max))
+    (message-insert-signature)))
+
 ;;;###autoload
 (defun multimu4e-set-account-from-name (account-name)
   "Set all bindings of account named ACCOUNT-NAME."
@@ -190,7 +201,8 @@ If NAME or ADDRESS are not provided, use the variables `user-full-name' and
 Interactively, ask the user for the account to use."
   (interactive (list (multimu4e--choose-account)))
   (multimu4e-set-account account)
-  (multimu4e--change-from-in-compose))
+  (multimu4e--change-from-in-compose)
+  (multimu4e--change-signature-in-compose))
 
 (provide 'multimu4e)
 
