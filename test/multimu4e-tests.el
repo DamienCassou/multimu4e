@@ -116,6 +116,35 @@
      "Was looking at %s"
      (buffer-substring-no-properties (point) (point-at-eol)))))
 
+(ert-deftest multimu4e-tests-change-signature-in-compose-with-newline ()
+  (with-current-buffer (get-buffer-create "*ert-multimu4el-w-newline*")
+    (insert "From: foo\n--text follows this line--\ncontent\n\n-- \nold signature")
+    (setq mu4e-compose-signature "new signature")
+    (multimu4e--change-signature-in-compose)
+    (message-goto-signature)
+    (previous-line 3)
+    (message-beginning-of-line)
+    (should (looking-at "content\n\n-- \nnew signature\n"))))
+
+(ert-deftest multimu4e-tests-change-signature-in-compose-without-newline ()
+  (with-current-buffer (get-buffer-create "*ert-multimu4el-wo-newline*")
+    (insert "From: foo\n--text follows this line--\ncontent\n-- \nold signature")
+    (setq mu4e-compose-signature "new signature")
+    (multimu4e--change-signature-in-compose)
+    (message-goto-signature)
+    (previous-line 2)
+    (message-beginning-of-line)
+    (should (looking-at "content\n-- \nnew signature\n"))))
+
+(ert-deftest multimu4e-tests-change-signature-in-compose-without-signature ()
+  (with-current-buffer (get-buffer-create "*ert-multimu4el-wo-signature*")
+    (insert "From: foo\n--text follows this line-- \ncontent")
+    (setq mu4e-compose-signature "new signature")
+    (multimu4e--change-signature-in-compose)
+    (message-goto-signature)
+    (message-beginning-of-line)
+    (should (looking-at "new signature"))))
+
 (provide 'multimu4e-tests)
 
 ;;; multimu4e-tests.el ends here
