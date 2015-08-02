@@ -182,14 +182,36 @@ If NAME or ADDRESS are not provided, use the variables `user-full-name' and
                     (or address user-mail-address)))))
 
 (defun multimu4e--change-signature-in-compose ()
-  "Change the signature of the current message."
+  "Change the signature of the current message.
+If the previous signature had no newline between the ending and
+the signature, this function removes the blank line before the
+new signature."
   (save-excursion
     (set (make-local-variable 'message-signature) mu4e-compose-signature)
-    (message-goto-signature)
-    (message-beginning-of-line)
-    (previous-line 2)
-    (delete-region (point) (point-max))
-    (message-insert-signature)))
+    (let ((last-line-not-empty nil))
+      ;; If the current message has a signature, delete it first
+      (if (message-goto-signature)
+          (progn
+            (previous-line 2)
+            ;; Check if the current line is empty. If it is not empty, go to the
+            ;; next line and remember the current point
+            (unless (equal (buffer-substring-no-properties
+                            (line-beginning-position) (line-end-position)) "")
+              (progn
+                (setq last-line-not-empty (point))
+                (end-of-line)
+                (open-line 1)))
+            (delete-region (point) (point-max))))
+      (message-insert-signature)
+      ;; If there was no blank line between the ending and the signature, the
+      ;; following code removes the empty line again that
+      ;; `message-insert-signature` includes
+      (if last-line-not-empty
+          (progn
+            (message-goto-signature)
+            (previous-line 1)
+            (flush-lines "^$" last-line-not-empty (point)))))))
+
 
 ;;;###autoload
 (defun multimu4e-set-account-from-name (account-name)
